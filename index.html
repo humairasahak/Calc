@@ -2,36 +2,60 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Simple Calculator</title>
+  <title>🎉 Math Playground for Kids 🎉</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="calculator">
-    <h1>Calculator</h1>
-    <input type="text" id="display" disabled />
-    <div class="buttons">
-      <button onclick="clearDisplay()">C</button>
-      <button onclick="appendValue('7')">7</button>
-      <button onclick="appendValue('8')">8</button>
-      <button onclick="appendValue('9')">9</button>
-      <button onclick="appendValue('/')">÷</button>
-
-      <button onclick="appendValue('4')">4</button>
-      <button onclick="appendValue('5')">5</button>
-      <button onclick="appendValue('6')">6</button>
-      <button onclick="appendValue('*')">×</button>
-
-      <button onclick="appendValue('1')">1</button>
-      <button onclick="appendValue('2')">2</button>
-      <button onclick="appendValue('3')">3</button>
-      <button onclick="appendValue('-')">−</button>
-
-      <button onclick="appendValue('0')">0</button>
-      <button onclick="appendValue('.')">.</button>
-      <button onclick="calculate()">=</button>
-      <button onclick="appendValue('+')">+</button>
-    </div>
+  <div class="container">
+    <h1>🧮 Welcome to Math Playground! 🎈</h1>
+    <div id="question">What is 2 + 2?</div>
+    <input type="number" id="answer" placeholder="Type your answer..." />
+    <button onclick="checkAnswer()">Check ✅</button>
+    <button id="nextBtn" onclick="generateQuestion()" style="display: none;">Next Question 🔁</button>
+    <div id="result"></div>
+    <p id="score">🏆 Score: 0</p>
   </div>
-  <script src="script.js"></script>
+
+  <script>
+    let score = 0;
+    let currentAnswer = 0;
+    let isAnswered = false;
+
+    function generateQuestion() {
+      const num1 = Math.floor(Math.random() * 10);
+      const num2 = Math.floor(Math.random() * 10);
+      const operations = ['+', '-', '*', '/'];
+      const op = operations[Math.floor(Math.random() * operations.length)];
+
+      let questionText = `${num1} ${op} ${num2}`;
+      currentAnswer = eval(questionText).toFixed(2);
+
+      document.getElementById('question').innerText = `What is ${questionText}?`;
+      document.getElementById('answer').value = '';
+      document.getElementById('result').innerText = '';
+      document.getElementById('nextBtn').style.display = 'none';
+      isAnswered = false;
+    }
+
+    function checkAnswer() {
+      if (isAnswered) return;
+
+      const userAnswer = parseFloat(document.getElementById('answer').value);
+      const result = document.getElementById('result');
+
+      if (Math.abs(userAnswer - currentAnswer) < 0.01) {
+        result.innerHTML = "🎉 Correct! Great job! 🎉";
+        score++;
+        document.getElementById('score').innerText = `🏆 Score: ${score}`;
+        isAnswered = true;
+        document.getElementById('nextBtn').style.display = 'inline-block';
+      } else {
+        result.innerHTML = "❌ Try again!";
+      }
+    }
+
+    // Load first question
+    window.onload = generateQuestion;
+  </script>
 </body>
 </html>
